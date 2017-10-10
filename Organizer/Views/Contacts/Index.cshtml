@@ -1,0 +1,183 @@
+﻿@model PagedList.IPagedList<Organizer.Models.Contact>
+
+@using PagedList.Mvc;
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+
+@{
+    ViewBag.Title = "Контакты";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div id="results">
+    <div class="container-fluid">
+        <div class="row content">
+            <div class="col-md-3">
+                <h2>Меню</h2>
+                <p>
+                    <button type="button" class="btn btn-default btn-block btn-info" onclick="location.href='@Url.Action("Create", "Contacts")'">Добавить контакт</button>
+                </p>
+                @using (Ajax.BeginForm("Index", "Contacts", new AjaxOptions { UpdateTargetId = "results" }))
+                {
+                    <div class="input-group">
+                        <input type="text" name="str" class="form-control" placeholder="Поиск" />
+                        <div class="input-group-btn">
+                            <button type="submit" class="btn btn-default" aria-label="Left Align">
+                                <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                            </button>
+                        </div>
+                    </div>
+                }
+            </div>
+            <div class="col-md-9">
+                <h2>Контакты</h2>
+                <div class="row">
+                    @if (Model == null || Model.Count() <= 0)
+                    {
+                        <p><strong>По текущему запросу нет данных!</strong></p>
+                    }
+                    else
+                    {
+                        foreach (var item in Model)
+                        {
+                            <div class="list-group todo-list">
+                                <div class="list-group-item todo-list-item">
+
+                                    <div class="container-fluid">
+                                        <div class="row">
+                                            <div class="col-md-11">
+                                                <div class="row">
+                                                    <div class="col-md-3">
+                                                        <p class="text-right"><strong>Имя</strong></p>
+                                                    </div>
+                                                    <div class="col-md-9">
+                                                        <p>@item.FirstName @item.LastName @item.Patronymic</p>
+                                                    </div>
+                                                </div>
+                                                @if (item.BirthDate != null)
+                                                {
+                                                    <div class="row">
+                                                        <div class="col-md-3">
+                                                            <p class="text-right"><strong>День рождения</strong></p>
+                                                        </div>
+                                                        <div class="col-md-9">
+                                                            <p>@item.BirthDate.ToShortDateString()</p>
+                                                        </div>
+                                                    </div>
+                                                }
+                                                @if (item.Organization != null)
+                                                {
+                                                    <div class="row">
+                                                        <div class="col-md-3">
+                                                            <p class="text-right"><strong>Организация</strong></p>
+                                                        </div>
+                                                        <div class="col-md-9">
+                                                            <p>@item.Organization</p>
+                                                        </div>
+                                                    </div>
+                                                }
+                                                @if (item.Position != null)
+                                                {
+                                                    <div class="row">
+                                                        <div class="col-md-3">
+                                                            <p class="text-right"><strong>Должность</strong></p>
+                                                        </div>
+                                                        <div class="col-md-9">
+                                                            <p>@item.Position</p>
+                                                        </div>
+                                                    </div>
+                                                }
+                                                @if (item.contactInformation.Where(c => c.PhoneNumber != null).Count() > 0)
+                                                {
+                                                    <div class="row">
+                                                        <div class="col-md-3">
+                                                            <p class="text-right"><strong>Номер телефона</strong></p>
+                                                        </div>
+                                                        <div class="col-md-9">
+                                                            @foreach (var info in item.contactInformation)
+                                                            {
+                                                                if (info.PhoneNumber != null)
+                                                                {
+                                                                    <p>@info.PhoneNumber</p>
+                                                                }
+                                                            }
+                                                        </div>
+                                                    </div>
+                                                }
+                                                @if (item.contactInformation.Where(c => c.Email != null).Count() > 0)
+                                                {
+                                                    <div class="row">
+                                                        <div class="col-md-3">
+                                                            <p class="text-right"><strong>Email</strong></p>
+                                                        </div>
+                                                        <div class="col-md-9">
+                                                            @foreach (var info in item.contactInformation)
+                                                            {
+                                                                if (info.Email != null)
+                                                                {
+                                                                    <p>@info.Email</p>
+                                                                }
+                                                            }
+                                                        </div>
+                                                    </div>
+                                                }
+                                                @if (item.contactInformation.Where(c => c.Skype != null).Count() > 0)
+                                                {
+                                                    <div class="row">
+                                                        <div class="col-md-3">
+                                                            <p class="text-right"><strong>Skype</strong></p>
+                                                        </div>
+                                                        <div class="col-md-9">
+                                                            @foreach (var info in item.contactInformation)
+                                                            {
+                                                                if (info.Skype != null)
+                                                                {
+                                                                    <p>@info.Skype</p>
+                                                                }
+                                                            }
+                                                        </div>
+                                                    </div>
+                                                }
+                                                @if (item.contactInformation.Where(c => c.OtherInfo != null).Count() > 0)
+                                                {
+                                                    <div class="row">
+                                                        <div class="col-md-3">
+                                                            <p class="text-right"><strong>Другая информация</strong></p>
+                                                        </div>
+                                                        <div class="col-md-9">
+                                                            @foreach (var info in item.contactInformation)
+                                                            {
+                                                                if (info.OtherInfo != null)
+                                                                {
+                                                                    <p>@info.OtherInfo</p>
+                                                                }
+                                                            }
+                                                        </div>
+                                                    </div>
+                                                }
+                                            </div>
+                                            <div class="col-ml-1 text-center">
+                                                <div class="btn-group-vertical" role="group">
+                                                    <button type="button" class="btn btn-default" onclick="location.href='@Url.Action("Edit", "Contacts", new { id = @item.Id })'">
+                                                        <span class="glyphicon glyphicon-pencil"></span>
+                                                    </button>
+                                                    <button type="button" class="btn btn-default" onclick="if (confirm('Удалить запись?')) { location.href='@Url.Action("Delete", "Contacts", new { id = @item.Id })' }">
+                                                        <span class="glyphicon glyphicon-trash"></span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        }
+                    }
+                    @if (Model.PageCount != 1)
+                    {
+                        Html.PagedListPager(Model, page => Url.Action("Index", new { page, str = ViewBag.str }));
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
