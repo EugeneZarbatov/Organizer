@@ -15,22 +15,22 @@
             <div class="list-group todo-list">
                 <div class="list-group-item todo-list-item">
                     <div class="row">
-                        <div class="col-md-11">
+                        <div class="col-md-10 col-sm-10 col-xs-9">
                             <div class="row">
-                                <div class="col-md-3">
+                                <div class="col-md-3 col-xs-5">
                                     <p class="text-right"><strong>Имя</strong></p>
                                 </div>
-                                <div class="col-md-9">
+                                <div class="col-md-9 col-xs-7">
                                     <p>@item.FirstName @item.LastName @item.Patronymic</p>
                                 </div>
                             </div>
                             @if (item.BirthDate != null)
                             {
                                 <div class="row">
-                                    <div class="col-md-3">
+                                    <div class="col-md-3 col-xs-5">
                                         <p class="text-right"><strong>День рождения</strong></p>
                                     </div>
-                                    <div class="col-md-9">
+                                    <div class="col-md-9 col-xs-7">
                                         <p>@item.BirthDate.ToShortDateString()</p>
                                     </div>
                                 </div>
@@ -38,10 +38,10 @@
                             @if (item.Organization != null)
                             {
                                 <div class="row">
-                                    <div class="col-md-3">
+                                    <div class="col-md-3 col-xs-5">
                                         <p class="text-right"><strong>Организация</strong></p>
                                     </div>
-                                    <div class="col-md-9">
+                                    <div class="col-md-9 col-xs-7">
                                         <p>@item.Organization</p>
                                     </div>
                                 </div>
@@ -49,10 +49,10 @@
                             @if (item.Position != null)
                             {
                                 <div class="row">
-                                    <div class="col-md-3">
+                                    <div class="col-md-3 col-xs-5">
                                         <p class="text-right"><strong>Должность</strong></p>
                                     </div>
-                                    <div class="col-md-9">
+                                    <div class="col-md-9 col-xs-7">
                                         <p>@item.Position</p>
                                     </div>
                                 </div>
@@ -60,10 +60,10 @@
                             @if (item.contactInformation.Where(c => c.PhoneNumber != null).Count() > 0)
                             {
                                 <div class="row">
-                                    <div class="col-md-3">
+                                    <div class="col-md-3 col-xs-5">
                                         <p class="text-right"><strong>Номер телефона</strong></p>
                                     </div>
-                                    <div class="col-md-9">
+                                    <div class="col-md-9 col-xs-7">
                                         @foreach (var info in item.contactInformation)
                                         {
                                             if (info.PhoneNumber != null)
@@ -77,10 +77,10 @@
                             @if (item.contactInformation.Where(c => c.Email != null).Count() > 0)
                             {
                                 <div class="row">
-                                    <div class="col-md-3">
+                                    <div class="col-md-3 col-xs-5">
                                         <p class="text-right"><strong>Email</strong></p>
                                     </div>
-                                    <div class="col-md-9">
+                                    <div class="col-md-9 col-xs-7">
                                         @foreach (var info in item.contactInformation)
                                         {
                                             if (info.Email != null)
@@ -94,10 +94,10 @@
                             @if (item.contactInformation.Where(c => c.Skype != null).Count() > 0)
                             {
                                 <div class="row">
-                                    <div class="col-md-3">
+                                    <div class="col-md-3 col-xs-5">
                                         <p class="text-right"><strong>Skype</strong></p>
                                     </div>
-                                    <div class="col-md-9">
+                                    <div class="col-md-9 col-xs-7">
                                         @foreach (var info in item.contactInformation)
                                         {
                                             if (info.Skype != null)
@@ -111,10 +111,10 @@
                             @if (item.contactInformation.Where(c => c.OtherInfo != null).Count() > 0)
                             {
                                 <div class="row">
-                                    <div class="col-md-3">
+                                    <div class="col-md-3 col-xs-5">
                                         <p class="text-right"><strong>Другая информация</strong></p>
                                     </div>
-                                    <div class="col-md-9">
+                                    <div class="col-md-9 col-xs-7">
                                         @foreach (var info in item.contactInformation)
                                         {
                                             if (info.OtherInfo != null)
@@ -126,7 +126,7 @@
                                 </div>
                             }
                         </div>
-                        <div class="col-md-1 text-center">
+                        <div class="col-md-2 col-sm-2 col-xs-3 text-right">
                             <div class="btn-group-vertical" role="group">
                                 <button type="button" class="btn btn-default" onclick="location.href='@Url.Action("Edit", "Contacts", new { id = @item.Id })'">
                                     <span class="glyphicon glyphicon-pencil"></span>

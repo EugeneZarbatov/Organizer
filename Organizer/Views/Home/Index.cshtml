@@ -18,8 +18,8 @@
             </p>
             @using (Ajax.BeginForm("Search", "Home", new AjaxOptions { UpdateTargetId = "results" }))
             {
-                <p>@Html.DropDownList("type", new SelectList(new String[] { "Все", "Встреча", "Дело", "Памятка" }), new { @class = "form-control", @value = ViewBag.NotesType })</p>
-                <p>@Html.DropDownList("duration", new SelectList(new String[] { "Список", "Месяц", "Неделя", "День" }), new { @class = "form-control", @value = ViewBag.Duration })</p>
+                <p>@Html.DropDownList("type", new SelectList(new String[] { "Все", "Встреча", "Дело", "Памятка" }), new { @class = "form-control", @style = "max-width: inherit", @value = ViewBag.NotesType })</p>
+                <p>@Html.DropDownList("duration", new SelectList(new String[] { "Список", "Месяц", "Неделя", "День" }), new { @class = "form-control", @style = "max-width: inherit", @value = ViewBag.Duration })</p>
                 <p>
                     <div class="input-group date" id="datetimepicker1">
                         <input type="text" name="beginDateTime" placeholder="Начало периода" class="form-control" value=@ViewBag.beginDateTime />
