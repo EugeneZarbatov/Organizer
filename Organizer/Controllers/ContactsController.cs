@@ -19,40 +19,9 @@ namespace Organizer.Controllers
         private OrganizerContext db = new OrganizerContext();
 
         // GET: Contacts
-        public async Task<ActionResult> Index(int? page, string str = null)
+        public ActionResult Index()
         {
-            IEnumerable<Contact> contacts = await db.Contacts.Include(c => c.contactInformation).ToListAsync();
-            IEnumerable<ContactInformation> contactInformations = await db.ContactInformations.ToListAsync();
-
-            ViewBag.str = str;
-
-            if (!String.IsNullOrEmpty(str))
-            {
-                contacts = from contactInfo in contactInformations
-                           join contact in contacts
-                           on contactInfo.ContactId equals contact.Id
-                           where (contact.FirstName ?? String.Empty).ToUpper().Contains(str.ToUpper()) ||
-                                 (contact.LastName ?? String.Empty).ToUpper().Contains(str.ToUpper()) ||
-                                 (contact.Patronymic ?? String.Empty).ToUpper().Contains(str.ToUpper()) ||
-                                 (contact.Organization ?? String.Empty).ToUpper().Contains(str.ToUpper()) ||
-                                 (contact.Position ?? String.Empty).ToUpper().Contains(str.ToUpper()) ||
-                                 (contact.BirthDate.ToShortDateString() ?? String.Empty).Contains(str) ||
-                                 (contactInfo.PhoneNumber ?? String.Empty).Contains(str) ||
-                                 (contactInfo.Email ?? String.Empty).ToUpper().Contains(str.ToUpper()) ||
-                                 (contactInfo.Skype ?? String.Empty).ToUpper().Contains(str.ToUpper()) ||
-                                 (contactInfo.OtherInfo ?? String.Empty).ToUpper().Contains(str.ToUpper())
-                           select contact;
-            }
-
-            contacts = contacts.Distinct().OrderBy(c => c.FirstName);
-
-            int pageSize = 6;
-            if (Request.HttpMethod != "GET")
-            {
-                page = 1;
-            }
-            int pageNumber = (page ?? 1);
-            return View(contacts.ToPagedList(pageNumber, pageSize));
+            return View();
         }
 
         // GET: Contacts/Create
@@ -193,6 +162,43 @@ namespace Organizer.Controllers
             db.Contacts.Remove(contact);
             await db.SaveChangesAsync();
             return RedirectToAction("Index");
+        }
+
+        // GET: Contacts/Search/
+        public async Task<ActionResult> Search(int? page, string str = null)
+        {
+            IEnumerable<Contact> contacts = await db.Contacts.Include(c => c.contactInformation).ToListAsync();
+            IEnumerable<ContactInformation> contactInformations = await db.ContactInformations.ToListAsync();
+
+            ViewBag.str = str;
+
+            if (!String.IsNullOrEmpty(str))
+            {
+                contacts = from contactInfo in contactInformations
+                           join contact in contacts
+                           on contactInfo.ContactId equals contact.Id
+                           where (contact.FirstName ?? String.Empty).ToUpper().Contains(str.ToUpper()) ||
+                                 (contact.LastName ?? String.Empty).ToUpper().Contains(str.ToUpper()) ||
+                                 (contact.Patronymic ?? String.Empty).ToUpper().Contains(str.ToUpper()) ||
+                                 (contact.Organization ?? String.Empty).ToUpper().Contains(str.ToUpper()) ||
+                                 (contact.Position ?? String.Empty).ToUpper().Contains(str.ToUpper()) ||
+                                 (contact.BirthDate.ToShortDateString() ?? String.Empty).Contains(str) ||
+                                 (contactInfo.PhoneNumber ?? String.Empty).Contains(str) ||
+                                 (contactInfo.Email ?? String.Empty).ToUpper().Contains(str.ToUpper()) ||
+                                 (contactInfo.Skype ?? String.Empty).ToUpper().Contains(str.ToUpper()) ||
+                                 (contactInfo.OtherInfo ?? String.Empty).ToUpper().Contains(str.ToUpper())
+                           select contact;
+            }
+
+            contacts = contacts.Distinct().OrderBy(c => c.FirstName);
+
+            int pageSize = 5;
+            if (Request.HttpMethod != "GET")
+            {
+                page = 1;
+            }
+            int pageNumber = (page ?? 1);
+            return PartialView(contacts.ToPagedList(pageNumber, pageSize));
         }
 
         protected override void Dispose(bool disposing)

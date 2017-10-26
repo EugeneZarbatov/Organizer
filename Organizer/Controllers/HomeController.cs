@@ -19,65 +19,9 @@ namespace Organizer.Controllers
         private OrganizerContext db = new OrganizerContext();
 
         // GET: Home
-        public async Task<ActionResult> Index(int? page, string type = "Все", string duration = "Список", string beginDateTime = null, string endDateTime = null)
+        public ActionResult Index()
         {
-            IEnumerable<Note> notes = await db.Notes.ToListAsync();
-
-            ViewBag.NotesType = type;
-            ViewBag.Duration = duration;
-            ViewBag.endDateTime = endDateTime;
-            ViewBag.beginDateTime = beginDateTime;
-
-            if (!String.IsNullOrEmpty(type) && !type.Equals("Все"))
-            {
-                notes = notes.Where(n => n.Type.Contains(type));
-            }
-            if (beginDateTime != null && endDateTime != null && beginDateTime != "" && endDateTime != "")
-            {
-                notes = notes.Where(n => (n.BeginDateTime > DateTime.Parse(beginDateTime) && n.BeginDateTime < DateTime.Parse(endDateTime)));
-            }
-            if (!String.IsNullOrEmpty(duration) && !duration.Equals("Список"))
-            {
-                switch (duration)
-                {
-                    case "День":
-                        notes = notes.Where(n => n.BeginDateTime.ToShortDateString().Equals(DateTime.Now.Date.ToShortDateString()));
-                        break;
-                    case "Неделя":
-                        DateTime monday = DateTime.Now.Date;
-                        if (monday.DayOfWeek != DayOfWeek.Monday)
-                        {
-                            while (monday.DayOfWeek != DayOfWeek.Monday)
-                            {
-                                monday = monday.AddDays(-1);
-                            }
-                        }
-                        DateTime sunday = DateTime.Now.Date;
-                        if (sunday.DayOfWeek != DayOfWeek.Sunday)
-                        {
-                            while (sunday.DayOfWeek != DayOfWeek.Sunday)
-                            {
-                                sunday = sunday.AddDays(1);
-                            }
-                        }
-
-                        notes = notes.Where(n => n.BeginDateTime.Date >= monday && n.BeginDateTime.Date <= sunday);
-                        break;
-                    case "Месяц":
-                        notes = notes.Where(n => n.BeginDateTime.ToString("MM.yyyy").Equals(DateTime.Now.ToString("MM.yyyy")));
-                        break;
-                }
-            }
-
-            notes = notes.OrderByDescending(n => n.BeginDateTime);
-
-            int pageSize = 6;
-            if (Request.HttpMethod != "GET")
-            {
-                page = 1;
-            }
-            int pageNumber = (page ?? 1);
-            return View(notes.ToPagedList(pageNumber, pageSize));
+            return View();
         }
 
         // GET: Home/Create
@@ -185,6 +129,68 @@ namespace Organizer.Controllers
             note.State = true;
             await db.SaveChangesAsync();
             return RedirectToAction("Index", new { page });
+        }
+
+        // GET: /Home/Search
+        public async Task<ActionResult> Search(int? page, string type = "Все", string duration = "Список", string beginDateTime = null, string endDateTime = null)
+        {
+            IEnumerable<Note> notes = await db.Notes.ToListAsync();
+
+            ViewBag.NotesType = type;
+            ViewBag.Duration = duration;
+            ViewBag.endDateTime = endDateTime;
+            ViewBag.beginDateTime = beginDateTime;
+
+            if (!String.IsNullOrEmpty(type) && !type.Equals("Все"))
+            {
+                notes = notes.Where(n => n.Type.Contains(type));
+            }
+            if (beginDateTime != null && endDateTime != null && beginDateTime != "" && endDateTime != "")
+            {
+                notes = notes.Where(n => (n.BeginDateTime > DateTime.Parse(beginDateTime) && n.BeginDateTime < DateTime.Parse(endDateTime)));
+            }
+            if (!String.IsNullOrEmpty(duration) && !duration.Equals("Список"))
+            {
+                switch (duration)
+                {
+                    case "День":
+                        notes = notes.Where(n => n.BeginDateTime.ToShortDateString().Equals(DateTime.Now.Date.ToShortDateString()));
+                        break;
+                    case "Неделя":
+                        DateTime monday = DateTime.Now.Date;
+                        if (monday.DayOfWeek != DayOfWeek.Monday)
+                        {
+                            while (monday.DayOfWeek != DayOfWeek.Monday)
+                            {
+                                monday = monday.AddDays(-1);
+                            }
+                        }
+                        DateTime sunday = DateTime.Now.Date;
+                        if (sunday.DayOfWeek != DayOfWeek.Sunday)
+                        {
+                            while (sunday.DayOfWeek != DayOfWeek.Sunday)
+                            {
+                                sunday = sunday.AddDays(1);
+                            }
+                        }
+
+                        notes = notes.Where(n => n.BeginDateTime.Date >= monday && n.BeginDateTime.Date <= sunday);
+                        break;
+                    case "Месяц":
+                        notes = notes.Where(n => n.BeginDateTime.ToString("MM.yyyy").Equals(DateTime.Now.ToString("MM.yyyy")));
+                        break;
+                }
+            }
+
+            notes = notes.OrderByDescending(n => n.BeginDateTime);
+
+            int pageSize = 5;
+            if (Request.HttpMethod != "GET")
+            {
+                page = 1;
+            }
+            int pageNumber = (page ?? 1);
+            return PartialView(notes.ToPagedList(pageNumber, pageSize));
         }
 
         protected override void Dispose(bool disposing)

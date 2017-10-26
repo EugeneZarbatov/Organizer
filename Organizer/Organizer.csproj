@@ -308,6 +308,8 @@
     <Content Include="Views\Contacts\Index.cshtml" />
     <Content Include="Views\Home\Edit.cshtml" />
     <Content Include="Views\Home\Create.cshtml" />
+    <Content Include="Views\Home\Search.cshtml" />
+    <Content Include="Views\Contacts\Search.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
